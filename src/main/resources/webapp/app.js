@@ -22,11 +22,11 @@
     });
 
     var BookView = Backbone.View.extend({
-        tagName:"div",
-        className:"bookContainer",
-        template:$("#bookTemplate").html(),
+        tagName: "div",
+        className: "bookContainer",
+        template: $("#bookTemplate").html(),
 
-        render:function () {
+        render: function () {
             var tmpl = _.template(this.template); //tmpl is a function that takes a JSON and returns html
             this.$el.html(tmpl(this.model.toJSON())); //this.el is what we defined in tagName. use $el to get access to jQuery html() function
             return this;
@@ -36,7 +36,7 @@
             "click .delete": "deleteBook"
         },
 
-        deleteBook:function () {
+        deleteBook: function () {
             //Delete model
             this.model.destroy();
 
@@ -90,17 +90,17 @@
             this.collection.add(new Book(formData));
         },
 
-        removeBook: function(removedBook){
+        removeBook: function (removedBook) {
             var removedBookData = removedBook.attributes;
 
-            _.each(removedBookData, function(val, key){
-                if(removedBookData[key] === removedBook.defaults[key]){
+            _.each(removedBookData, function (val, key) {
+                if (removedBookData[key] === removedBook.defaults[key]) {
                     delete removedBookData[key];
                 }
             });
 
-            _.each(books, function(book){
-                if(_.isEqual(book, removedBookData)){
+            _.each(books, function (book) {
+                if (_.isEqual(book, removedBookData)) {
                     books.splice(_.indexOf(books, book), 1);
                 }
             });
