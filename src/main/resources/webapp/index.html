@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Backbone Baby Steps</title>
+
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div id="books">
+    <script id="bookTemplate" type="text/template">
+        <img src="<%= coverImage %>"/>
+        <ul>
+            <li><%= title %></li>
+            <li><%= author %></li>
+            <li><%= releaseDate %></li>
+            <li><%= keywords %></li>
+        </ul>
+    </script>
+</div>
+<script src="libs/jquery-2.1.4.js"></script>
+<script src="libs/underscore.js"></script>
+<script src="libs/backbone.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
