@@ -1,23 +1,26 @@
 (function ($) {
-    var books = [
-        {title: "JS the good parts", author: "John Doe", releaseDate: "2012", keywords: "JavaScript Programming"},
-        {title: "CS the better parts", author: "John Doe", releaseDate: "2012", keywords: "CoffeeScript Programming"},
-        {title: "Scala for the impatient", author: "John Doe", releaseDate: "2012", keywords: "Scala Programming"},
-        {title: "American Psyco", author: "Bret Easton Ellis", releaseDate: "2012", keywords: "Novel Splatter"},
-        {title: "Eloquent JavaScript", author: "John Doe", releaseDate: "2012", keywords: "JavaScript Programming"}
-    ];
+    /*var books = [
+        {title: "JS the good parts", author: "John Doe", releasedate: "2012", keywords: "JavaScript Programming"},
+        {title: "CS the better parts", author: "John Doe", releasedate: "2012", keywords: "CoffeeScript Programming"},
+        {title: "Scala for the impatient", author: "John Doe", releasedate: "2012", keywords: "Scala Programming"},
+        {title: "American Psyco", author: "Bret Easton Ellis", releasedate: "2012", keywords: "Novel Splatter"},
+        {title: "Eloquent JavaScript", author: "John Doe", releasedate: "2012", keywords: "JavaScript Programming"}
+    ];*/
 
     var Book = Backbone.Model.extend({
         defaults: {
+            ID: "0",
             coverImage: "img/placeholder.png",
             title: "No title",
             author: "Unknown",
-            releaseDate: "Unknown",
+            releasedate: '2008-04-30T21:00:00.000Z',
             keywords: "None"
-        }
+        },
+        idAttribute: "_id"
     });
 
     var Library = Backbone.Collection.extend({
+        url: 'http://localhost:8081/api/books',
         model: Book
     });
 
@@ -37,8 +40,17 @@
         },
 
         deleteBook: function () {
+            console.log(this.model.toJSON());
+            console.log('Destroying book id: ' + this.model.get("id"));
             //Delete model
-            this.model.destroy();
+            this.model.destroy({
+                error:function (model, response) {
+                    console.log("Failed destroying book");
+                },
+                success:function (model, response) {
+                    console.log("Succeeded in destroying book");
+                }
+            });
 
             //Delete view
             this.remove();
@@ -48,16 +60,19 @@
     var LibraryView = Backbone.View.extend({
         el: $("#books"),
 
-        events: {
-            "click #add": "addBook"
-        },
-
         initialize: function () {
-            this.collection = new Library(books);
+            //this.collection = new Library(books);
+            this.collection = new Library();
+            this.collection.fetch({
+                error:function () {
+                        console.log(arguments);
+                    }
+            });
             this.render();
 
             this.collection.on("add", this.renderBook, this);
             this.collection.on("remove", this.removeBook, this);
+            this.collection.on("reset", this.render, this);
         },
 
         render: function () {
@@ -74,6 +89,10 @@
             this.$el.append(bookView.render().el);
         },
 
+        events: {
+            "click #add": "addBook"
+        },
+
         addBook: function (e) {
             e.preventDefault();
 
@@ -85,9 +104,11 @@
                 }
             });
 
-            books.push(formData);
+            //books.push(formData);
 
-            this.collection.add(new Book(formData));
+            console.log(formData);
+
+            this.collection.create(formData);
         },
 
         removeBook: function (removedBook) {
@@ -99,11 +120,11 @@
                 }
             });
 
-            _.each(books, function (book) {
+            /*_.each(books, function (book) {
                 if (_.isEqual(book, removedBookData)) {
                     books.splice(_.indexOf(books, book), 1);
                 }
-            });
+            });*/
         }
     });
 
