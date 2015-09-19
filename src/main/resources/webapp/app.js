@@ -79,7 +79,7 @@
 
             var formData = {};
 
-            $("#addBook div").children("input").each(function (i, el) {
+            $("#addBook").find("div").children("input").each(function (i, el) {
                 if ($(el).val() !== "") {
                     formData[el.id] = $(el).val();
                 }
