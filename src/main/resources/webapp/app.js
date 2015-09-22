@@ -79,7 +79,7 @@
                     formData[el.id] = $(el).val();
                 }
             });
-            this.collection.create(formData);
+            this.collection.create(formData, {wait:true});
         }
 
     });
